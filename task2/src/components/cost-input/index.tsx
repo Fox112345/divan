@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import './cost-input.css';
 
-const CheckMinMaxValue = (
+const checkMinMaxValue = (
   min: number,
   max: number,
   isNegative: boolean,
@@ -16,7 +16,7 @@ const CheckMinMaxValue = (
   return value;
 };
 
-const CheckNegative = (isNegative: boolean, value: string | number) =>
+const checkNegative = (isNegative: boolean, value: string | number) =>
   isNegative ? `-${value}`.toString() : value.toString();
 
 interface InputProps {
@@ -39,7 +39,7 @@ export const CostInput: React.FC<InputProps> = ({
 }) => {
   const [value, setValue] = useState<number | undefined>(initialValue);
 
-  const inputSize = Math.round(placeholder?.length * 0.2) || size;
+  const inputSize = Math.round(placeholder?.length * 0.5) || size;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -50,7 +50,7 @@ export const CostInput: React.FC<InputProps> = ({
 
       const inputValue = inputRef.current.value.replace(/\D/g, '');
 
-      const normalizedValue = CheckMinMaxValue(
+      const normalizedValue = checkMinMaxValue(
         min,
         max,
         isNegative,
@@ -59,12 +59,11 @@ export const CostInput: React.FC<InputProps> = ({
 
       if (normalizedValue && inputValue.toString().length > 4) {
         const result = new Intl.NumberFormat('ru-RU').format(normalizedValue);
-
-        inputRef.current.value = isNegative ? `-${result}` : result;
-      } else if (normalizedValue) {
-        inputRef.current.value = CheckNegative(isNegative, normalizedValue);
+        inputRef.current.value = checkNegative(isNegative, result);
       } else {
-        inputRef.current.value = inputValue.toString();
+        inputRef.current.value = normalizedValue
+          ? checkNegative(isNegative, normalizedValue)
+          : inputValue.toString();
       }
 
       const numbers = parseInt(inputRef.current.value.replace(/(\D)/g, ''));
@@ -81,19 +80,19 @@ export const CostInput: React.FC<InputProps> = ({
         const isNegative =
           inputRef.current.value.trimStart()[0] === '-' ? true : false;
         const resultNumbers = inputRef.current.value.replace(/(\D)/g, '');
-        inputRef.current.value = CheckNegative(isNegative, resultNumbers);
+        inputRef.current.value = checkNegative(isNegative, resultNumbers);
       }
     }
   };
 
   const updateWidth = () => {
     if (inputRef && inputRef?.current && inputRef.current.parentNode) {
-      //@ts-ignore
+      // @ts-ignore
       inputRef.current.parentNode.dataset.value = inputRef.current.value;
     }
   };
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = () => {
     checkNumbers();
     updateWidth();
   };
