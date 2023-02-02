@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import './cost-input.css';
 
@@ -32,12 +32,20 @@ export const CostInput: React.FC<InputProps> = ({
   placeholder = 'Плейсхолдер',
   max,
   min,
-  initialValue = undefined,
+  initialValue = null,
   onBlur,
   size = 4,
   ...rest
 }) => {
-  const [value, setValue] = useState<number | undefined>(initialValue);
+  const [value, setValue] = useState<number | null>(initialValue);
+
+  useEffect(() => {
+    if (inputRef && inputRef.current && (initialValue || initialValue === 0)) {
+      inputRef.current.value = initialValue.toString();
+      //@ts-ignore
+      inputRef.current.parentNode.dataset.value = inputRef.current.value;
+    }
+  }, []);
 
   const inputSize = Math.round(placeholder?.length * 0.5) || size;
 
@@ -113,10 +121,19 @@ export const CostInput: React.FC<InputProps> = ({
         className='input'
         id='input'
       />
+      {/* Плейсхолдер сделан таким образом, что бы выровнять его в разных браузерах одинаково*/}
+      <span
+        className={`placeholder ${
+          value || value === 0 ? 'placeholder--hidden' : ''
+        }`}
+        aria-hidden='true'
+      >
+        {placeholder}
+      </span>
       <label
         htmlFor='cost-input'
         className={`input-group__label ${
-          value ? 'input-group__label--active' : ''
+          value || value === 0 ? 'input-group__label--active' : ''
         }`}
       >
         {placeholder}

@@ -4,7 +4,8 @@
   align-items: center;
   position: relative;
   margin: 5px;
-  /* overflow: hidden; */
+  padding-top: 3px;
+  overflow: hidden;
 
   font-size: 32px;
 }
@@ -49,48 +50,44 @@ input {
   border-radius: 10px;
 }
 
+.input ~ .placeholder {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+
+  pointer-events: none;
+
+  font-size: 14px;
+  color: #b0afaf;
+}
+
+.input:focus ~ .placeholder,
+.placeholder--hidden {
+  opacity: 0;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.input::placeholder {
+/* .input::placeholder {
   font-size: 14px;
   line-height: 30px;
   transform: translateY(-5px);
   vertical-align: top;
   color: #b0afaf;
 
-  opacity: 1;
+  opacity: 0;
   transition: all 0.2s;
 }
 
-::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  line-height: 30px;
-  text-align: center;
-}
-
-:-moz-placeholder {
-  /* Firefox 18- */
-  line-height: 30px;
-  text-align: center;
-}
-
-::-moz-placeholder {
-  /* Firefox 19+ */
-  line-height: 30px;
-  text-align: center;
-}
-
-:-ms-input-placeholder {
-  /* IE 10+ */
-  line-height: 30px;
-  text-align: center;
-}
-
 .input:focus::placeholder {
+  opacity: 0;
+} */
+
+.input::placeholder {
   opacity: 0;
 }
 
@@ -111,10 +108,10 @@ input::-webkit-inner-spin-button {
   font-weight: 400;
 }
 
-.input:focus + .input-group__label,
+.input:focus ~ .input-group__label,
 .input-group__label--active {
   opacity: 1;
   visibility: visible;
   font-size: 14px;
-  transform: translateY(-33px);
+  transform: translateY(-30px);
 }
